@@ -1,0 +1,21 @@
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+# Cada classe que herda de db.Model se torna uma tabela no banco de dados.
+class User(db.Model): # Declaração de um novo modelo/tabela: User
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True) # Define uma coluna ... 
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+
+class Task(db.Model):
+    __tablename__ = 'tasks'
+
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(100), nullable = False)
+    description = db.Column(db.String(300), nullable = True)
+    status = db.Column(db.String, nullable = False, default = 'Pendente')
+    user_id = db.Column(db.Integer, db.ForeignKey('users_id'))
+
