@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
 
 db = SQLAlchemy()
 
@@ -17,5 +18,5 @@ class Task(db.Model):
     title = db.Column(db.String(100), nullable = False)
     description = db.Column(db.String(300), nullable = True)
     status = db.Column(db.String, nullable = False, default = 'Pendente')
-    user_id = db.Column(db.Integer, db.ForeignKey('users_id'))
+    user_id = db.Column(db.Integer, ForeignKey('users.id'), primary_key = True)
 
