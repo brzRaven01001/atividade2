@@ -1,12 +1,54 @@
 <html>
 <head>
     <title>Minhas Tarefas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn-acao {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+        .btn-concluir {
+            background-color: #4CAF50; 
+            color: white;
+        }
+        .btn-excluir {
+            background-color: #f44336; 
+            color: white;
+        }
+        .link-criar {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
 
     <h1>Minhas Tarefas</h1>
 
-    <a href="create_task.html">Criar nova tarefa</a>
+    <a href="create_task.html" class="link-criar">Criar nova tarefa</a>
 
     <table>
         <thead>
@@ -20,13 +62,23 @@
         </thead>
         <tbody>
             <tr>
-                <td>Exemplo de Tarefa</td>
-                <td>Essa é uma descrição.</td>
+                <td>Comprar pão</td>
+                <td>Ir na padaria e comprar pão integral.</td>
                 <td>Pendente</td>
-                <td>Usuário Teste</td>
+                <td>João</td>
                 <td>
-                    <button>Concluir</button>
-                    <button>Excluir</button>
+                    <button class="btn-acao btn-concluir">Concluir</button>
+                    <button class="btn-acao btn-excluir">Excluir</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Estudar HTML</td>
+                <td>Revisar os conceitos de formulários e tabelas.</td>
+                <td>Concluída</td>
+                <td>Maria</td>
+                <td>
+                    <button class="btn-acao btn-concluir">Concluir</button>
+                    <button class="btn-acao btn-excluir">Excluir</button>
                 </td>
             </tr>
         </tbody>
