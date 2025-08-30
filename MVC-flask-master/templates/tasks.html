@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minhas Tarefas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .link-criar {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .link-criar:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        .status-pendente {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .status-concluido {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .btn-acao {
+            padding: 6px 12px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            margin: 2px;
+        }
+        .btn-concluir {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-concluir:hover {
+            background-color: #218838;
+        }
+        .btn-excluir {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-excluir:hover {
+            background-color: #c82333;
+        }
+        .actions {
+            white-space: nowrap;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .no-tasks {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minhas Tarefas</h1>
+
+        <a href="{{ url_for('create_task') }}" class="link-criar">Criar nova tarefa</a>
+        <a href="{{ url_for('index') }}" class="back-link" style="float: right;">← Voltar para home</a>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Descrição</th>
+                    <th>Status</th>
+                    <th>Usuário</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if tasks %}
+                    {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.description or 'Sem descrição' }}</td>
+                        <td class="{% if task.status == 'Concluído' %}status-concluido{% else %}status-pendente{% endif %}">
+                            {{ task.status }}
+                        </td>
+                        <td>{{ task.user.name if task.user else 'N/A' }}</td>
+                        <td class="actions">
+                            {% if task.status != 'Concluído' %}
+                            <form action="{{ url_for('update_task_status', task_id=task.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn-acao btn-concluir">Concluir</button>
+                            </form>
+                            {% endif %}
+                            <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn-acao btn-excluir" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?')">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="no-tasks">Nenhuma tarefa encontrada. <a href="{{ url_for('create_task') }}">Crie uma nova tarefa!</a></td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
