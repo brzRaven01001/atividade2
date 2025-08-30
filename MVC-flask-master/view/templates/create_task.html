@@ -1,18 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Page</title>
+    <title>Criar Nova Tarefa</title>
 </head>
 <body>
-    <h1>Index Page</h1>
 
-    <ul>
-        {% for user in users %}
-        <li>{{user.name}} - {{user.email}}</li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('contact') }}">Página de Cadastro</a>
+    <h1>Criar Nova Tarefa</h1>
+
+    <form method="POST">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="title"><br><br>
+
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="description"></textarea><br><br>
+
+        <label for="usuario">Atribuir a:</label>
+        <select id="usuario" name="usuario">
+            <option value="1">Usuário 1</option>
+            <option value="2">Usuário 2</option>
+        </select><br><br>
+
+        <button type="submit">Salvar Tarefa</button>
+    </form>
+
 </body>
 </html>
