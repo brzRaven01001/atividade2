@@ -1,24 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Page</title>
+    <title>Minhas Tarefas</title>
 </head>
 <body>
-    <h1>Contact Page</h1>
 
-    <form method="POST">
-        <label for="name">Nome</label>
-        <input type="text" name="name" id="name" required>
+    <h1>Minhas Tarefas</h1>
 
-        <br/>
+    <a href="create_task.html">Criar nova tarefa</a>
 
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th>Usuário</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Exemplo de Tarefa</td>
+                <td>Essa é uma descrição.</td>
+                <td>Pendente</td>
+                <td>Usuário Teste</td>
+                <td>
+                    <button>Concluir</button>
+                    <button>Excluir</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-        <br/>
-        <button type="submit">Cadastrar</button>
-    </form>
 </body>
 </html>
