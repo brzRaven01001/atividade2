@@ -1,11 +1,18 @@
-from flask import render_template, request, redirect, url_for
+from flask import request, url_for, jsonify
 from models.user import User, db
 
 class UserController:
     @staticmethod
     def index():
         users = User.query.all()
-        return render_template('index.html', users=users)
+        users_list = []
+        for user in users:
+            users_list.append({
+                "id": user.id,
+                "name": user.name,
+                "email": user.email
+            })
+        return jsonify(users_list), 200
 
     @staticmethod
     def contact():
@@ -19,6 +26,11 @@ class UserController:
             db.session.add(new_user)
             db.session.commit()
 
-            return redirect(url_for('index'))
-
-        return render_template('contact.html')
+            return jsonify({
+                "mensagem": "Usuário cadastrado com sucesso!",
+                "id": new_user.id,
+                "name": new_user.name,
+                "email": new_user.email
+            }), 201
+        
+        return jsonify({"mensagem": "Utilize POST para cadastrar."}), 405

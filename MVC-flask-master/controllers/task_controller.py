@@ -1,51 +1,64 @@
-from flask import render_template, request, redirect, url_for
-from models.user import User, db, Task
+from flask import request, url_for, jsonify
+from models.user import User, Task, db
 
 class TaskController:
     @staticmethod
-    def list_tasks():
-        tasks = Task.query.all()
-        return render_template('tasks.html', tasks=tasks)
-
-    @staticmethod
-    def create_task():
+    def tasks():
         if request.method == 'POST':
-            title = request.form['title']
-            description = request.form['description']
-            user_id = request.form['user_id']
+            data = request.json
+            if User.query.get(data['user_id']):
+                new_task = Task(id=data['id'], title=data['title'], description=data['description'], user_id=data['user_id'])
+                db.session.add(new_task)
+                db.session.commit()
+                return request.json
+            else:
+                return jsonify({"Usuário não encontrado"}), 404
+        if request.method == 'GET':
+            tasks = Task.query.all()
+            tasks_list = []
+            for task in tasks:
+                tasks_list.append({
+                    "id": task.id,
+                    "title": task.title,
+                    "description": task.description,
+                    "status": task.status,
+                    "user_id": task.user_id
+                })
+            return jsonify(tasks_list), 200
+    
+    @staticmethod
+    def edit_tasks(task_id):
+        if request.method == 'PUT':
+            data = request.json
+            task = Task.query.get(task_id)
+            data['id'] = task.id
+            data['user_id'] = task.user_id
+
+            if task is None:
+                return jsonify({'Tarefa Não Encontrada'}), 404
             
-            usuario = User.query.get(user_id)
-            if not usuario:
-                return "Usuário não encontrado"
+            if "title" in data:
+                task.title = data['title']
+            else:
+                data['title'] = task.title
+
+            if "description" in data:
+                task.description = data['description']
+            else:
+                data['description'] = task.description
+
+            if "status" in data:
+                task.status = data['status']
+            else:
+                data['status'] = task.status
             
-            new_task = Task(title=title, description=description, user_id=user_id)
-            db.session.add(new_task)
             db.session.commit()
-            return redirect(url_for('list_tasks'))
-        
-        users = User.query.all()
-        return render_template('create_task.html', users=users)
+            return jsonify(data), 200
+        if request.method == 'DELETE':
+            task = Task.query.get(task_id)
+            if not task:
+                return jsonify({'Task Não Encontrada'}), 404
+            db.session.delete(task)
+            db.session.commit()
+            return jsonify(('Task deletada')), 200
 
-    @staticmethod
-    def update_task_status(task_id):
-        task = Task.query.get(task_id)
-        if task is None:
-            return 'Tarefa Não Encontrada'
-       
-        if task.status == "Pendente":
-            task.status = "Concluído"
-        else:
-            task.status = "Pendente"
-        
-        db.session.commit()
-        return redirect(url_for("list_tasks"))
-
-    @staticmethod
-    def delete_task(task_id):
-        task = Task.query.get(task_id)
-        if not task:
-            return 'Task Não Encontrada'
-        
-        db.session.delete(task)
-        db.session.commit()
-        return redirect(url_for("list_tasks"))

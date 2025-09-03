@@ -23,14 +23,12 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-app.add_url_rule('/', 'index', UserController.index)
+app.add_url_rule('/index', 'index', UserController.index)
 app.add_url_rule('/contact', 'contact', UserController.contact, methods=['GET', 'POST'])
 
 # Rotas de tarefas
-app.add_url_rule('/tasks', 'list_tasks', TaskController.list_tasks, methods=['GET'])
-app.add_url_rule('/tasks/new', 'create_task', TaskController.create_task, methods=['GET', 'POST'])
-app.add_url_rule('/tasks/update/<int:task_id>', 'update_task_status', TaskController.update_task_status, methods=['POST'])
-app.add_url_rule('/tasks/delete/<int:task_id>', 'delete_task', TaskController.delete_task, methods=['POST'])
+app.add_url_rule('/tasks', 'tasks', TaskController.tasks, methods=['GET', 'POST'])
+app.add_url_rule('/tasks/<int:task_id>', 'edit_tasks', TaskController.edit_tasks, methods=['PUT', 'DELETE'])
 
 if __name__ == '__main__':
     app.run(debug=True, port=5002)
