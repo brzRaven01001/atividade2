@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flasgger import Swagger
 from config import Config
 from controllers.user_controller import UserController
 from models.user import db
@@ -7,6 +8,8 @@ from controllers.task_controller import TaskController
 
 app = Flask(__name__, template_folder='templates')
 app.config.from_object(Config)
+
+swagger = Swagger(app)
 
 print("=" * 50)
 print("DEBUG: Verificando estrutura de pastas")
