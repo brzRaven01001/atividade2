@@ -1,37 +1,30 @@
-import os
 from flask import Flask
 from flasgger import Swagger
 from config import Config
 from controllers.user_controller import UserController
-from models.user import db
 from controllers.task_controller import TaskController
+from models.user import db
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__)
 app.config.from_object(Config)
 
+# Inicializa Swagger
 swagger = Swagger(app)
 
-print("=" * 50)
-print("DEBUG: Verificando estrutura de pastas")
-print("Diretório atual:", os.getcwd())
-print("Pasta templates existe?", os.path.exists('templates'))
-if os.path.exists('templates'):
-    print("Arquivos na pasta templates:", os.listdir('templates'))
-print("=" * 50)
-
-# inicializa o banco de dados
+# Inicializa banco
 db.init_app(app)
-
-# cria tabelas
 with app.app_context():
     db.create_all()
 
-app.add_url_rule('/index', 'index', UserController.index)
-app.add_url_rule('/contact', 'contact', UserController.contact, methods=['GET', 'POST'])
+# ---------------- ROTAS DE USUÁRIOS ----------------
+app.add_url_rule('/users', 'list_users', UserController.index, methods=['GET'])
+app.add_url_rule('/users', 'create_user', UserController.contact, methods=['POST'])
 
-# Rotas de tarefas
-app.add_url_rule('/tasks', 'tasks', TaskController.tasks, methods=['GET', 'POST'])
-app.add_url_rule('/tasks/<int:task_id>', 'edit_tasks', TaskController.edit_tasks, methods=['PUT', 'DELETE'])
+# ---------------- ROTAS DE TAREFAS ----------------
+app.add_url_rule('/tasks', 'list_tasks', TaskController.list_tasks, methods=['GET'])
+app.add_url_rule('/tasks', 'create_task', TaskController.create_task, methods=['POST'])
+app.add_url_rule('/tasks/<int:task_id>', 'update_task', TaskController.update_task, methods=['PUT'])
+app.add_url_rule('/tasks/<int:task_id>', 'delete_task', TaskController.delete_task, methods=['DELETE'])
 
 if __name__ == '__main__':
     app.run(debug=True, port=5002)
