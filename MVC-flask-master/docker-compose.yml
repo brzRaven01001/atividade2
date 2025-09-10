@@ -1,0 +1,23 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dados-api
+    ports:
+      - "5002:5002"
+    volumes:
+      - .:/MVC-flask-master
+    environment:
+      DATABASE_URL: sqlite:///./users.db
+      FLASK_ENV: development
+    depends_on: []
+
+  swagger-ui:
+      image: swaggerapi/swagger-ui
+      ports:
+      - "8080:80"
+      environment:
+        URL: http://api:5002/apidocs/swagger.json
+      depends_on:
+      - api
